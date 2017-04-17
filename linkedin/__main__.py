@@ -38,7 +38,8 @@ def parse_args():
     )
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
+    """ Main function """
     # Parse command-line arguments
     args = parse_args()
 
@@ -49,3 +50,7 @@ if __name__ == '__main__':
     process = CrawlerProcess({'LOG_LEVEL': 'WARNING'})
     process.crawl(LinkedinSpider, token, args.keyword, args.output)
     process.start()
+
+if __name__ == '__main__':
+    main()
+
