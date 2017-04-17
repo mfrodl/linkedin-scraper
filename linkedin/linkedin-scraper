@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import sys
 import os
 
@@ -8,12 +9,8 @@ from spiders import LinkedinSpider
 
 TOKEN_PATH = os.path.expanduser('~/.linkedin-access-token')
 
-def usage():
-    message = 'Usage: {0} keyword [keyword...]'.format(sys.argv[0])
-    sys.stderr.write(message + os.linesep)
-    sys.exit(1)
-
 def load_token():
+    """ Load access token from file """
     try:
         with open(TOKEN_PATH) as f:
             token = f.read()
@@ -25,15 +22,30 @@ def load_token():
         )
         sys.exit(1)
 
+def parse_args():
+    """ Process command-line arguments with argparse """
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-o', '--output',
+        default='output.csv',
+        metavar='FILE',
+        help='output file (default: output.csv)',
+    )
+    parser.add_argument(
+        'keyword',
+        nargs='+',
+        help='one or more keywords to search for',
+    )
+    return parser.parse_args()
+
 if __name__ == '__main__':
+    # Parse command-line arguments
+    args = parse_args()
 
-    if len(sys.argv) <= 1:
-        usage()
-
-    keywords = ' '.join(sys.argv[1:])
-
+    # Load access token from file
     token = load_token()
 
+    # Run scraper
     process = CrawlerProcess({'LOG_LEVEL': 'WARNING'})
-    process.crawl(LinkedinSpider, token, keywords)
+    process.crawl(LinkedinSpider, token, args.keyword, args.output)
     process.start()

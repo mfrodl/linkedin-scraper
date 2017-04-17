@@ -14,7 +14,7 @@ SERVER = 'https://www.linkedin.com'
 class LinkedinSpider(scrapy.Spider):
     name = "linkedin"
 
-    def __init__(self, access_token, keywords, output_file='output.csv'):
+    def __init__(self, access_token, keywords, output_file):
         super(LinkedinSpider, self).__init__()
 
         # Construct URL from keywords
