@@ -37,7 +37,7 @@ The resulting CSV file can look like this::
     Robert,Smith,Senior Java Developer,British Airways,London,United Kingdom
     ...
 
-Install
+Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can install the package system-wide::
@@ -54,6 +54,16 @@ Authentication
 Note that to perform LinkedIn queries, the tool **needs an access
 token**. The token is read from the file ``.linkedin-access-token``
 in your home directory. 
+
+Gotchas
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+
+Some fields in the output CSV file might be empty. This indicates
+that the scraper failed to extract the relevant piece of
+information from the results page. One of the common causes is
+the limited visibility of profiles out of your network, a LinkedIn
+feature which prevents regular users from accessing certain
+profile information.
 
 Author
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
