@@ -7,7 +7,12 @@ import os
 from scrapy.crawler import CrawlerProcess
 from spiders import LinkedinSpider
 
+# Constants
 TOKEN_PATH = os.path.expanduser('~/.linkedin-access-token')
+DESCRIPTION = (
+    'Based on keywords defined by user, perform a LinkedIn query, extract '
+    'user information from the first results page and store it to a CSV file'
+)
 
 def load_token():
     """ Load access token from file """
@@ -24,7 +29,7 @@ def load_token():
 
 def parse_args():
     """ Process command-line arguments with argparse """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
         '-o', '--output',
         default='output.csv',
