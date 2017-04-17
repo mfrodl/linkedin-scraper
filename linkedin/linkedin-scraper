@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+import sys
+import os
+
+from scrapy.crawler import CrawlerProcess
+from spiders import LinkedinSpider
+
+TOKEN_PATH = os.path.expanduser('~/.linkedin-access-token')
+
+def usage():
+    message = 'Usage: {0} keyword [keyword...]'.format(sys.argv[0])
+    sys.stderr.write(message + os.linesep)
+    sys.exit(1)
+
+def load_token():
+    try:
+        with open(TOKEN_PATH) as f:
+            token = f.read()
+            return token
+    except IOError:
+        sys.stderr.write(
+            'Please create file {0} containing a valid LinkedIn access '
+            'token'.format(TOKEN_PATH) + os.linesep
+        )
+        sys.exit(1)
+
+if __name__ == '__main__':
+
+    if len(sys.argv) <= 1:
+        usage()
+
+    keywords = ' '.join(sys.argv[1:])
+
+    token = load_token()
+
+    process = CrawlerProcess({'LOG_LEVEL': 'WARNING'})
+    process.crawl(LinkedinSpider, token, keywords)
+    process.start()
