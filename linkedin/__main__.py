@@ -42,13 +42,14 @@ def main():
     """ Main function """
     # Parse command-line arguments
     args = parse_args()
+    keywords = ' '.join(args.keyword)
 
     # Load access token from file
     token = load_token()
 
     # Run scraper
     process = CrawlerProcess({'LOG_LEVEL': 'WARNING'})
-    process.crawl(LinkedinSpider, token, args.keyword, args.output)
+    process.crawl(LinkedinSpider, token, keywords, args.output)
     process.start()
 
 if __name__ == '__main__':
