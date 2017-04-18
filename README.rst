@@ -52,8 +52,12 @@ Authentication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
 
 Note that to perform LinkedIn queries, the tool **needs an access
-token**. The token is read from the file ``.linkedin-access-token``
-in your home directory. 
+token**.
+
+To generate one, log in to LinkedIn in your favourite browser.
+This will create a cookie named ``li_at`` for site
+``www.linkedin.com``. Save this cookie's value to file
+``.linkedin-access-token`` in your home directory. 
 
 Gotchas
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
