@@ -8,8 +8,12 @@ import sys
 from collections import defaultdict
 from items import LinkedinItem
 
-# Constants
 SERVER = 'https://www.linkedin.com'
+
+# Strings which are treated as separators of position and company. Everything
+# to the left of any of these strings is interpreted as the position,
+# everything to the right as the company.
+POSITION_COMPANY_SEPARATORS = [u' at ', u' bei ', u' ve společnosti ']
 
 class LinkedinSpider(scrapy.Spider):
     name = "linkedin"
@@ -60,9 +64,11 @@ class LinkedinSpider(scrapy.Spider):
         """ Parse MiniProfile item and add it to results """
         urn = item.get('objectUrn')
         occupation = item.get('occupation')
-        try:
-            position, company = occupation.split(' at ', 1)
-        except ValueError:
+        for separator in POSITION_COMPANY_SEPARATORS:
+            if separator in occupation:
+                position, company = occupation.split(separator, 1)
+                break
+        else:
             position, company = occupation, None
 
         results[urn].update({
