@@ -6,7 +6,7 @@ import csv
 import sys
 
 from collections import defaultdict
-from items import LinkedinItem
+from linkedin.items import LinkedinItem
 
 SERVER = 'https://www.linkedin.com'
 

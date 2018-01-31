@@ -5,7 +5,7 @@ import sys
 import os
 
 from scrapy.crawler import CrawlerProcess
-from spiders import LinkedinSpider
+from linkedin.spiders import LinkedinSpider
 
 # Constants
 TOKEN_PATH = os.path.expanduser('~/.linkedin-access-token')
