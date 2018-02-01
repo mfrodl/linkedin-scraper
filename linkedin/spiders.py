@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import unicodecsv as csv
 import scrapy
 import json
-import csv
 import sys
 
 from collections import defaultdict
@@ -95,7 +95,7 @@ class LinkedinSpider(scrapy.Spider):
     def write_results(self, items):
         """ Write results to CSV file """
         with open(self.output_file, 'wb') as csv_file:
-            csv_writer = csv.writer(csv_file)
+            csv_writer = csv.writer(csv_file, encoding='utf-8')
 
             # Write header
             csv_writer.writerow([
@@ -106,10 +106,10 @@ class LinkedinSpider(scrapy.Spider):
             # Write items
             for item in items:
                 csv_writer.writerow([
-                    item.get('first_name').encode('utf-8'),
-                    item.get('last_name').encode('utf-8'),
-                    item.get('position').encode('utf-8'),
-                    item.get('company').encode('utf-8'),
-                    item.get('city').encode('utf-8'),
-                    item.get('country').encode('utf-8'),
+                    item.get('first_name'),
+                    item.get('last_name'),
+                    item.get('position'),
+                    item.get('company'),
+                    item.get('city'),
+                    item.get('country'),
                 ])
