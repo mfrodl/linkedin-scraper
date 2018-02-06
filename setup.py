@@ -10,6 +10,7 @@ setup(name='linkedin',
       packages=['linkedin'],
       install_requires=[
           'scrapy',
+          'six',
           'unicodecsv',
       ],
       entry_points={

@@ -5,20 +5,26 @@ import scrapy
 import json
 import sys
 
-from collections import defaultdict
+from scrapy import FormRequest, Request, Spider
 from linkedin.items import LinkedinItem
+from collections import defaultdict
+from six.moves import input
+from getpass import getpass
 
 SERVER = 'https://www.linkedin.com'
+
+HOMEPAGE_URL = 'https://www.linkedin.com'
+LOGIN_URL = 'https://www.linkedin.com/uas/login-submit'
 
 # Strings which are treated as separators of position and company. Everything
 # to the left of any of these strings is interpreted as the position,
 # everything to the right as the company.
 POSITION_COMPANY_SEPARATORS = [u' at ', u' bei ', u' ve společnosti ']
 
-class LinkedinSpider(scrapy.Spider):
-    name = "linkedin"
+class LinkedinSpider(Spider):
+    name = 'linkedin'
 
-    def __init__(self, access_token, keywords, output_file):
+    def __init__(self, keywords, output_file, user=None, password=None):
         super(LinkedinSpider, self).__init__()
 
         # Construct URL from keywords
@@ -26,15 +32,32 @@ class LinkedinSpider(scrapy.Spider):
             SERVER, keywords
         )
 
-        # Construct cookie from access token
-        self.cookies = {'li_at': access_token}
-
         self.output_file = output_file
+        self.user = user
+        self.password = password
 
     def start_requests(self):
-        yield scrapy.Request(
-            url=self.url, cookies=self.cookies, callback=self.parse
+        yield Request(HOMEPAGE_URL, callback=self.login)
+
+    def login(self, response):
+        """ Send login credentials to LinkedIn """
+        selector = '#loginCsrfParam-login::attr(value)'
+        csrf = response.css(selector).extract_first()
+
+        # Form data to be used for authentication, prompt for missing
+        formdata = {
+            'session_key': self.user or input('User: '),
+            'session_password': self.password or getpass(),
+            'loginCsrfParam': csrf,
+        }
+
+        yield FormRequest(
+            LOGIN_URL, formdata=formdata, callback=self.logged_in
         )
+
+    def logged_in(self, response):
+        """ Store session cookies after login """
+        yield Request(url=self.url, callback=self.parse)
 
     def parse(self, response):
         """ Parse a LinkedIn search results page """
